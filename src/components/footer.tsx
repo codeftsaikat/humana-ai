@@ -7,12 +7,10 @@ const Footer = () => {
   }
 
   return (
-    <Container>
-      <div className="flex justify-center py-2">
+    <Container className="py-2">
         <p className="text-center text-sm text-muted-foreground">
           Carlos Garavito - {getCurrentYear()}
         </p>
-      </div>
     </Container>
   )
 }
