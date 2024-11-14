@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Este proyecto es una aplicación web que permite a los usuarios transformar texto generado por inteligencia artificial en un estilo más natural y "humanizado". Para acceder a la funcionalidad de transformación, los usuarios deben registrarse e iniciar sesión. La aplicación sigue un flujo seguro de autenticación y autorización para garantizar que solo los usuarios autenticados puedan acceder a esta funcionalidad.
 
-## Getting Started
+### Funcionalidades Principales
 
-First, run the development server:
+1.  **Registro e Inicio de Sesión**:
+    -   Los usuarios pueden registrarse y, una vez verificados, iniciar sesión para acceder a la funcionalidad de "humanización" de texto.
+    -   Autenticación protegida con JWT para seguridad.
+2.  **Humanización de Texto**:
+    -   Los usuarios pegan un texto en un campo de texto (textarea) proporcionado.
+    -   Al hacer clic en "humanizar", el texto se envía a un modelo de IA integrado en el backend, el cual procesa el texto para hacer que suene más natural y coloquial.
+    -   El resultado humanizado se devuelve al usuario y se muestra en pantalla.
+3.  **Gestión de Historial de Texto**:
+    -   La aplicación almacena los textos procesados para cada usuario, permitiéndoles acceder a su historial de humanizaciones pasadas.
+    -   Opción para volver a humanizar textos anteriores o copiar los resultados actuales.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Tecnologías Utilizadas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-   **Frontend**:
+    -   **Next.js**: Framework de React para SSR y fácil manejo de rutas.
+    -   **Tailwind CSS**: Framework de estilos para una personalización rápida y componentes responsivos.
+    -   **shadcn/ui**: Biblioteca de componentes estilizados para una interfaz de usuario moderna y funcional.
+    -   **TypeScript**: Tipado estático que ayuda a evitar errores y mejorar la legibilidad del código.
+-   **Backend**:
+    -   **MongoDB y Prisma**: Base de datos NoSQL y ORM para el almacenamiento eficiente y el acceso a datos, incluyendo la gestión de usuarios y el historial de textos.
+    -   **Modelo IA**: La aplicación utiliza un modelo de IA para transformar los textos en una versión más humanizada.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Diagrama de la Base de Datos en MongoDB
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Dado que se usará MongoDB, una base de datos NoSQL, el diseño se centrará en colecciones. A continuación se detalla la estructura de cada colección:
 
-## Learn More
+### 1\. **Users**
 
-To learn more about Next.js, take a look at the following resources:
+-   Almacena los datos de los usuarios registrados.
+-   Campos:
+    -   `userId` (ObjectId): ID único para el usuario.
+    -   `username` (String): Nombre de usuario único.
+    -   `email` (String): Correo electrónico único.
+    -   `passwordHash` (String): Hash de la contraseña del usuario.
+    -   `createdAt` (Date): Fecha de creación de la cuenta.
+    -   `updatedAt` (Date): Fecha de última actualización de la cuenta.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2\. **TextTransformations**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-   Almacena los textos humanizados y su historial.
+-   Campos:
+    -   `transformationId` (ObjectId): ID único para el registro de transformación.
+    -   `userId` (ObjectId): ID de referencia del usuario, enlazado a la colección de **Users**.
+    -   `originalText` (String): Texto original proporcionado por el usuario.
+    -   `humanizedText` (String): Texto transformado a un estilo más natural.
+    -   `createdAt` (Date): Fecha en que se procesó el texto.
+ 
 
-## Deploy on Vercel
+![diagrama-app](https://github.com/user-attachments/assets/8e50141f-793c-4214-b4de-b9cfe50d5ad9)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
