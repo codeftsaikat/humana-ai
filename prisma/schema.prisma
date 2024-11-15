@@ -14,10 +14,10 @@ model User {
   passwordHash        String
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
-  textTransformations TextTranformations[]
+  textTransformations TextTranformation[]
 }
 
-model TextTranformations {
+model TextTranformation {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   originalText  String
   humanizedText String
