@@ -1,6 +1,17 @@
+import { MenuIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 import Container from "./container"
 import Logo from "./logo"
-import { Button } from "./ui/button"
 
 const Header = () => {
   return (
@@ -10,13 +21,32 @@ const Header = () => {
           <Logo />
           <h1 className="text-lg font-bold">Humanize</h1>
         </div>
-        <div className="w-fit flex gap-2">
+        <div className="w-fit hidden md:flex gap-2">
           <Button variant='outline'>
             Register
           </Button>
           <Button variant='default'>
             Login
           </Button>
+        </div>
+        <div className="block md:hidden">
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost' size='icon'>
+                <MenuIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  Register
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Login
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
     </Container>
