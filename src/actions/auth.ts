@@ -34,7 +34,7 @@ export const loginWithCredentials = async (email: string, password: string) => {
 
 export const registerWithCredentials = async (name: string, email: string, password: string) => {
   try {
-    const userExists = await prisma.user.findUnique({ where: { email } });
+    const userExists = await getUserByEmail(email);
     if (userExists) {
       return { success: false, error: "User already exists" };
     }
@@ -66,7 +66,7 @@ export const registerWithCredentials = async (name: string, email: string, passw
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
-    throw new Error('User not found');
+    return null
   }
   return user;
 }
