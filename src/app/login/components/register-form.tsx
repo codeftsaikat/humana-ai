@@ -8,6 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import AuthBtn from '@/components/auth-btn'
 import { registerWithCredentials } from '@/actions/auth'
+import { useToast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
 
 const registerSchema = z.object({
   name: z.string().min(2, "Enter a valid name").max(32),
@@ -17,6 +19,8 @@ const registerSchema = z.object({
 
 const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -30,9 +34,27 @@ const RegisterForm = () => {
   const onSubmit = async ({ name, email, password }: z.infer<typeof registerSchema>) => {
     setIsLoading(true)
     try {
-      await registerWithCredentials(name, email, password)
+      const result = await registerWithCredentials(name, email, password)
+      if (result.success) {
+        toast({
+          title: "Registration Success",
+          description: "You are now registered",
+        })
+        router.push("/")
+      } else {
+        toast({
+          title: "Registration Error",
+          description: result.error,
+          variant: "destructive",
+        })
+      }
     } catch (error) {
       console.error('Register error:', error)
+      toast({
+        title: "Registration Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }

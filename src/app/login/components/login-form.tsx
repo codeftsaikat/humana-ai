@@ -10,6 +10,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import AuthBtn from '@/components/auth-btn'
 import { loginWithCredentials } from '@/actions/auth'
+import { useRouter } from 'next/navigation'
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(2).max(32),
@@ -19,6 +20,7 @@ const loginSchema = z.object({
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -31,11 +33,16 @@ const LoginForm = () => {
     setIsLoading(true)
     try {
       await loginWithCredentials(email, password)
+      toast({
+        title: "Login Success",
+        description: "You are now logged in",
+      })
+      router.push("/")
     } catch (error) {
       console.log('Login error:', error);
       toast({
         title: "Login Error",
-        description: "Invalid email or password",
+        description: `${error}`,
         variant: "destructive",
       })
     } finally {

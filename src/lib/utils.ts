@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getEmailInitial = (name: string) => {
-  return name.split(' ').map((n) => n[0]).join('');
+  return name.split(' ').map((n) => n[0] + n[1]).join('').toUpperCase();
 }

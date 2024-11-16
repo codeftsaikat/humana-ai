@@ -5,6 +5,7 @@ import { prisma } from "@/config/prisma";
 import { revalidatePath } from "next/cache";
 import bcryptjs from 'bcryptjs'
 import { User } from "@prisma/client";
+import { AuthError } from "next-auth";
 
 export const login = async (provider: string) => {
   await signIn(provider, { redirectTo: "/" });
@@ -18,20 +19,24 @@ export const logout = async () => {
 
 export const loginWithCredentials = async (email: string, password: string) => {
   try {
-    await signIn('credentials', { email, password, redirect: false })
+    await signIn('credentials', { email, password, redirect: false });
   } catch (error) {
-    console.error('Login error:', error)
-    return { success: false, error: 'An unexpected error occurred' }
-  } finally {
-    revalidatePath("/")
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          throw new Error('Invalid email or password');
+        default:
+          throw new Error('Unknown error');
+      }
+    }
   }
 }
 
 export const registerWithCredentials = async (name: string, email: string, password: string) => {
   try {
-    const userExists = await getUserByEmail(email);
+    const userExists = await prisma.user.findUnique({ where: { email } });
     if (userExists) {
-      throw new Error("User already exists");
+      return { success: false, error: "User already exists" };
     }
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -42,13 +47,19 @@ export const registerWithCredentials = async (name: string, email: string, passw
         email: email,
         password: hashedPassword,
       }
-    })
+    });
+
+    const result = await signIn('credentials', { email, password, redirect: false });
+
+    if (result?.error) {
+      return { success: false, error: result.error };
+    }
+
+    return { success: true };
 
   } catch (error) {
-    console.log(error);
-    throw error;
-  } finally {
-    revalidatePath("/");
+    console.error(error);
+    return { success: false, error: "An unexpected error occurred" };
   }
 }
 
