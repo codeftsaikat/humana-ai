@@ -4,7 +4,7 @@ import React from 'react'
 const Home = () => {
 
   return (
-    <Container className='flex-1 pt-24'>
+    <Container className='flex-1'>
       <div>
         <h1>Home</h1>
       </div>
