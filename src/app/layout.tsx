@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Inter } from 'next/font/google';
 
-import { getSession, SessionProvider } from "next-auth/react";
+// import { getSession, SessionProvider } from "next-auth/react";
 
 import Footer from "@/components/footer";
 import Header from "@/components/header";
@@ -17,30 +17,25 @@ const inter = Inter({
   style: ['normal', 'italic'],
 });
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
 
-  const session = await getSession();
-
   return (
-    <SessionProvider session={session}>
-
-      <html lang="en">
-        <body
-          className={`${inter.className} antialiased`}
-        >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <div className="flex-1 flex flex-col">
-              {children}
-            </div>
-            <Footer />
+    <html lang="en">
+      <body
+        className={`${inter.className} antialiased`}
+      >
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <div className="flex-1 flex flex-col">
+            {children}
           </div>
-        </body>
-      </html>
-    </SessionProvider>
+          <Footer />
+        </div>
+      </body>
+    </html>
   );
 }

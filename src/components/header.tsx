@@ -10,8 +10,14 @@ import {
 
 import Container from "./container"
 import Logo from "./logo"
+import LoginBtn from "./login-btn"
+import { auth } from "@/auth"
+import LogoutBtn from "./logout-btn"
 
-const Header = () => {
+const Header = async () => {
+
+  const session = await auth();
+
   return (
     <Container className="max-w-5xl left-1/2 -translate-x-1/2 fixed top-4">
       <header className="flex justify-between items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border rounded-xl px-4 py-3 shadow-lg">
@@ -19,14 +25,10 @@ const Header = () => {
           <Logo />
           <h1 className="text-lg font-bold">Humanize</h1>
         </div>
-        <div className="w-fit hidden md:flex gap-2">
-          <Button variant='outline'>
-            Register
-          </Button>
-          <Button variant='default'>
-            Login
-          </Button>
+        <div className="w-fit">
+          {!session ? <LoginBtn /> : <LogoutBtn />}
         </div>
+        {/* TODO: Configure dropdown */}
         <div className="block md:hidden">
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
