@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google';
 
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "IA Humanizer",
@@ -35,6 +36,7 @@ export default function RootLayout({
           </div>
           <Footer />
         </div>
+        <Toaster />
       </body>
     </html>
   );

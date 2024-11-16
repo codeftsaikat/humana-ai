@@ -3,10 +3,13 @@
 import React, { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { useToast } from "@/hooks/use-toast"
+
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import AuthBtn from '@/components/auth-btn'
+import { loginWithCredentials } from '@/actions/auth'
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(2).max(32),
@@ -15,6 +18,7 @@ const loginSchema = z.object({
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -23,13 +27,17 @@ const LoginForm = () => {
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+  const onSubmit = async ({ email, password }: z.infer<typeof loginSchema>) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('Login:', data)
+      await loginWithCredentials(email, password)
     } catch (error) {
-      console.error('Login error:', error)
+      console.log('Login error:', error);
+      toast({
+        title: "Login Error",
+        description: "Invalid email or password",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }

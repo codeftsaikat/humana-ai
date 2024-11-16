@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import AuthBtn from '@/components/auth-btn'
+import { registerWithCredentials } from '@/actions/auth'
 
 const registerSchema = z.object({
   name: z.string().min(2, "Enter a valid name").max(32),
@@ -26,11 +27,10 @@ const RegisterForm = () => {
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+  const onSubmit = async ({ name, email, password }: z.infer<typeof registerSchema>) => {
     setIsLoading(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      console.log('Register:', data)
+      await registerWithCredentials(name, email, password)
     } catch (error) {
       console.error('Register error:', error)
     } finally {

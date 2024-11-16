@@ -1,5 +1,3 @@
-export { auth } from "@/auth"
-
 import { auth } from "@/auth";
 import { NextResponse } from "next/server"
 import type { NextRequest } from 'next/server'
