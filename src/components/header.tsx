@@ -14,10 +14,7 @@ const Header = async () => {
   return (
     <Container className="max-w-5xl left-1/2 -translate-x-1/2 fixed top-4">
       <header className="flex justify-between items-center min-h-16 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border rounded-xl px-4 py-3 shadow-lg">
-        <div className="flex items-center gap-2">
-          <Logo />
-          <h1 className="text-lg font-bold">Humanize</h1>
-        </div>
+        <Logo />
         {!session ? <Link href='/login'><Button>Login</Button></Link> : <UserMenu auth={session} />}
       </header>
     </Container>

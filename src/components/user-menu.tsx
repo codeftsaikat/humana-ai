@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { IAuth } from '@/types/user'
 import Link from 'next/link'
 import { logout } from '@/actions/auth'
+import { getEmailInitial } from '@/lib/utils'
 
 interface Props {
   auth: IAuth
@@ -24,17 +25,12 @@ const UserMenu: FC<Props> = ({ auth }) => {
     await logout();
   }
 
-  const getInitials = (name: string) => {
-    const [firstName, lastName] = name.split(" ")
-    return firstName.charAt(0) + lastName.charAt(0)
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className='shadow-md'>
           <AvatarImage src={auth.user.image} alt='User avatart' />
-          <AvatarFallback>{getInitials(auth.user.name)}</AvatarFallback>
+          <AvatarFallback>{getEmailInitial(auth.user.email)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

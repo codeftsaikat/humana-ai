@@ -13,7 +13,10 @@ const providers: Provider[] = [
     clientId: process.env.AUTH_GITHUB_ID,
     clientSecret: process.env.AUTH_GITHUB_SECRET,
   }),
-  Resend
+  Resend({
+    apiKey: process.env.AUTH_RESEND_KEY,
+    from: "no-reply@cgaravito.dev"
+  })
 ]
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
