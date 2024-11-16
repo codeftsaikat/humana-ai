@@ -12,11 +12,12 @@ import Container from "./container"
 import Logo from "./logo"
 import LoginBtn from "./login-btn"
 import { auth } from "@/auth"
-import LogoutBtn from "./logout-btn"
+import UserMenu from "./user-menu"
+import { IAuth } from "@/types/user"
 
 const Header = async () => {
 
-  const session = await auth();
+  const session = await auth() as IAuth;
 
   return (
     <Container className="max-w-5xl left-1/2 -translate-x-1/2 fixed top-4">
@@ -26,7 +27,7 @@ const Header = async () => {
           <h1 className="text-lg font-bold">Humanize</h1>
         </div>
         <div className="w-fit">
-          {!session ? <LoginBtn /> : <LogoutBtn />}
+          {!session ? <LoginBtn /> : <UserMenu auth={session} />}
         </div>
         {/* TODO: Configure dropdown */}
         <div className="block md:hidden">
