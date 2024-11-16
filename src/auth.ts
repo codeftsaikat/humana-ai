@@ -9,7 +9,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 
 import { prisma } from "./config/prisma"
 
-export const { handlers: { GET, POST }, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {strategy: 'jwt'},
   providers: [
