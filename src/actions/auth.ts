@@ -12,8 +12,3 @@ export const logout = async () => {
   await signOut({ redirectTo: "/" });
   revalidatePath("/");
 }
-
-export const signInWithResend = async (formData: FormData) => {
-  await signIn("resend", formData);
-  revalidatePath("/");
-}

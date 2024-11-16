@@ -1,22 +1,19 @@
-import React from 'react'
-import { useFormStatus } from 'react-dom'
+'use client'
+
+import { FC } from 'react'
 import { Button } from './ui/button'
-import { LoaderCircle, SendIcon } from 'lucide-react'
+import { LoaderCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-const AuthBtn = () => {
-  const { pending } = useFormStatus()
+interface Props {
+  name: string;
+  isLoading: boolean;
+}
+
+const AuthBtn: FC<Props> = ({ name, isLoading }) => {
   return (
-    <Button disabled={pending} type='submit' className={cn("w-full max-w-60 flex items-center gap-2", pending ? "opacity-50" : "")}>
-      {pending ? (
-        <>
-          <LoaderCircle className='animate-spin' />
-          <span>Loading</span>
-        </>
-      ) : <>
-        <SendIcon />
-        <span>Magic Link</span>
-      </>}
+    <Button disabled={isLoading} type='submit' className={cn("w-full", isLoading ? "opacity-50" : "")}>
+      {isLoading ? <LoaderCircle className='animate-spin' /> : name}
     </Button >
   )
 }
