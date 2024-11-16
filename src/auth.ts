@@ -16,34 +16,12 @@ const providers: Provider[] = [
     clientSecret: process.env.AUTH_GITHUB_SECRET,
   }),
   Credentials({
-    credentials: { password: { label: "Password", type: "password" } },
-    authorize(c) {
-      if (c.password !== "password") return null
-      return {
-        id: "test",
-        name: "Test User",
-        email: "test@example.com",
-      }
-    },
+  
   })
 ]
-
-export const providerMaps = providers
-  .map((provider) => {
-    if (typeof provider === 'function') {
-      const providerData = provider()
-      return { id: providerData.id, name: providerData.name }
-    } else {
-      return { id: provider.id, name: provider.name }
-    }
-  })
-  .filter((provider) => provider.id !== 'credentials')
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   providers,
-  // pages: {
-  //   signIn: "/login"
-  // }
 })
