@@ -11,17 +11,24 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { useToast } from '@/hooks/use-toast'
+import { type ActionError } from '@/types/openai'
+import { useRouter } from 'next/navigation'
+import { ActionErrors } from '@/constants/const'
 
 const textSchema = z.object({
   text: z.string().min(32, 'Text must be at least 32 characters').max(1000, 'Text must be less than 1000 characters')
 })
 
 export default function TextBox() {
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { toast } = useToast()
+
+  const [isLoading, setIsLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0)
   const [charCount, setCharCount] = useState(0)
+
   const [humanizedText, setHumanizedText] = useState<string | null>(null)
+
   const humanizedTextRef = useRef<HTMLDivElement | null>(null);
 
   const form = useForm<z.infer<typeof textSchema>>({
@@ -30,7 +37,7 @@ export default function TextBox() {
       text: ''
     }
   })
-
+  
   const { watch, setValue } = form
   const text = watch('text')
 
@@ -53,12 +60,26 @@ export default function TextBox() {
         humanizedTextRef.current.scrollIntoView({ behavior: 'smooth' })
       }
     } catch (error) {
-      console.log("Error: ", error);
-      toast({
-        title: "Error",
-        description: `${error}`,
-        variant: "destructive"
-      })
+      if (error === ActionErrors.UNAUTHORIZED) {
+        toast({
+          title: "No autorizado",
+          description: "Por favor, inicia sesión para continuar.",
+          variant: "destructive"
+        });
+        router.push('/login');
+      } else if (error === ActionErrors.API_ERROR) {
+        toast({
+          title: "Error de API",
+          description: "Hubo un problema con el servicio de OpenAI. Por favor, intenta de nuevo más tarde.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: `${error.message}` || "Ocurrió un error inesperado.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsLoading(false)
     }
@@ -121,7 +142,7 @@ export default function TextBox() {
       {humanizedText && (
         <div ref={humanizedTextRef} className="mt-8 p-4 bg-gray-100 rounded-lg">
           <h2 className="text-xl font-bold mb-2">Humanized Text:</h2>
-          <p className='prose break-words'>{humanizedText}</p>
+          <p className='text-sm'>{humanizedText}</p>
         </div>
       )}
     </Card>
