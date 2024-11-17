@@ -11,7 +11,7 @@ export const login = async (provider: string) => {
 }
 
 export const logout = async () => {
-  await signOut({ redirectTo: "/" });
+  await signOut({ redirectTo: "/login" });
 }
 
 export const loginWithCredentials = async (email: string, password: string) => {

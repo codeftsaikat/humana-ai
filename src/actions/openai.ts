@@ -1,20 +1,42 @@
 'use server'
 
+import { auth } from "@/auth";
 import OpenAI from "openai";
 
 const openai = new OpenAI();
 
-export const humanizeText = async (text: string) => {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [
-      { role: "system", content: "You are a humanizing bot expert in refining texts. Your task is to humanize user-supplied content while maintaining the original structure and length. Adjust words and phrases for a more natural tone, without adding new information. Limit your response to a maximum of one additional line from the original text. Prioritize the authenticity and fluency of human language." },
-      {
-        role: "user",
-        content: text,
-      },
-    ],
-  });
+export const humanizeText = async (prevState: string | null, formData: FormData): Promise<string | null> => {
 
-  return completion.choices[0].message.content;
+  const session = await auth();
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+
+  const text = formData.get('text');
+  if (typeof text !== 'string') {
+    throw new Error('Invalid input: text must be a string');
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: "You are a humanizing bot expert in refining texts. Your specialty lies in transforming user-supplied content to ensure it resonates with a more natural human tone while preserving the original structure and length. Your task is to humanize the following text:" },
+        {
+          role: "user",
+          content: text,
+        },
+        {
+          role: "system",
+          content: "Keep in mind to adjust words and phrases for a more natural flow without introducing new information. You are limited to a maximum of one additional line compared to the original text. Prioritize authenticity and fluency in human language, and ensure your response is concise and focused solely on the refined text."
+        }
+      ],
+    });
+    return completion.choices[0].message.content;
+  } catch (error) {
+    console.error('Error humanizing text:', error);
+    throw new Error('Failed to humanize text');
+  }
+
+
 }

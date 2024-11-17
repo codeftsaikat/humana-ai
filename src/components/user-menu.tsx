@@ -26,7 +26,7 @@ const UserMenu: FC<Props> = ({ auth }) => {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger>
         <Avatar className='shadow-md'>
           <AvatarImage src={auth.user.image} alt='User avatar' />
