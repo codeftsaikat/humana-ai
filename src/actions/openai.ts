@@ -2,19 +2,15 @@
 
 import { auth } from "@/auth";
 import OpenAI from "openai";
+import { ActionErrors } from "@/constants/const";
 
 const openai = new OpenAI();
 
-export const humanizeText = async (prevState: string | null, formData: FormData): Promise<string | null> => {
+export const humanizeText = async (text: string): Promise<string | null> => {
 
   const session = await auth();
   if (!session) {
-    throw new Error('Unauthorized');
-  }
-
-  const text = formData.get('text');
-  if (typeof text !== 'string') {
-    throw new Error('Invalid input: text must be a string');
+    throw ActionErrors.UNAUTHORIZED;
   }
 
   try {
@@ -32,11 +28,13 @@ export const humanizeText = async (prevState: string | null, formData: FormData)
         }
       ],
     });
+
     return completion.choices[0].message.content;
   } catch (error) {
     console.error('Error humanizing text:', error);
-    throw new Error('Failed to humanize text');
+    if (error === ActionErrors.UNAUTHORIZED || error === ActionErrors.API_ERROR) {
+      throw error;
+    }
+    throw ActionErrors.UNKNOWN_ERROR;
   }
-
-
 }
