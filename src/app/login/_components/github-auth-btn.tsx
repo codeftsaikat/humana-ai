@@ -13,7 +13,7 @@ const GithubAuthBtn = () => {
 
   return (
     <Button variant="secondary" className="w-full" onClick={handleClick}>
-      <FaGithub className="mr-2 h-4 w-4" />
+      <FaGithub className="mr-2 size-4" />
       Continue with GitHub
     </Button>
   )

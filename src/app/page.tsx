@@ -6,7 +6,7 @@ import React from 'react'
 const Home = () => {
 
   return (
-    <main className='w-full pt-16'>
+    <main className='w-full pt-16 pb-8'>
       <Container className='flex-1 flex flex-col items-center text-center space-y-4 py-16'>
         <div className='mt-16 space-y-2'>
           <h1 className='text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none'>Humanize AI Generated Content</h1>

@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import { Inter } from 'next/font/google';
 import { Toaster } from "@/components/ui/toaster";
 
-// import Footer from "@/components/footer";
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default function RootLayout({
           <div className="flex-1 flex flex-col">
             {children}
           </div>
-          {/* <Footer /> */}
+          <Footer />
         </div>
         <Toaster />
       </body>

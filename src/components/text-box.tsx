@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
 import { X } from 'lucide-react'
+import { humanizeText } from '@/actions/openai'
 
 export default function TextBox() {
   const [text, setText] = useState('')
@@ -18,9 +19,11 @@ export default function TextBox() {
     setWordCount(text.trim() === '' ? 0 : words.length)
   }, [text])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault()
     console.log('Submitted text:', text)
+    const res = await humanizeText(text);
+    console.log('Humanized text:', res)
     setText('')
   }
 
