@@ -8,7 +8,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from "./config/prisma"
 import { Provider } from "next-auth/providers"
 
-import { getUserByEmail, validateUserPassword } from "./actions/auth"
+import { validateUserPassword, getUserByEmail } from "./actions/user"
 
 const providers: Provider[] = [
   Github({

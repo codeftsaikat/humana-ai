@@ -7,9 +7,10 @@ import { useState } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import SubmitBtn from '@/components/submit-btn'
-import { registerWithCredentials } from '@/actions/auth'
+
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
+import { registerWithCredentials } from '../actions'
 
 const registerSchema = z.object({
   name: z.string().min(2, "Enter a valid name").max(32),

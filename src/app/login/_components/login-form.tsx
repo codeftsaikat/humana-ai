@@ -9,8 +9,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import SubmitBtn from '@/components/submit-btn'
-import { loginWithCredentials } from '@/actions/auth'
 import { useRouter } from 'next/navigation'
+import { loginWithCredentials } from '../actions'
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(2).max(32),

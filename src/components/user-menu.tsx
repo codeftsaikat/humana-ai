@@ -12,8 +12,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { IAuth } from '@/types/user'
 import Link from 'next/link'
-import { logout } from '@/actions/auth'
 import { getEmailInitial } from '@/lib/utils'
+import { logout } from '@/app/login/actions'
 
 interface Props {
   auth: IAuth
@@ -22,29 +22,29 @@ interface Props {
 const UserMenu: FC<Props> = ({ auth }) => {
 
   const handleLogout = async () => {
-    await logout();
+    await logout()
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className='shadow-md'>
-          <AvatarImage src={auth.user.image} alt='User avatart' />
+          <AvatarImage src={auth.user.image} alt='User avatar' />
           <AvatarFallback>{getEmailInitial(auth.user.email)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Link href='/account'>
+        <Link href='/profile'>
+          <DropdownMenuItem>
             Profile
-          </Link>
-        </DropdownMenuItem>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem disabled>Billing</DropdownMenuItem>
         <DropdownMenuItem disabled>Subscription</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className='cursor-pointer' onClick={handleLogout}>
+        <DropdownMenuItem onClick={handleLogout}>
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

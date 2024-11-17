@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { Inter } from 'next/font/google';
-
-// import { getSession, SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/toaster";
 
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "IA Humanizer",

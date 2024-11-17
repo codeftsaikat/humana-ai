@@ -1,9 +1,9 @@
 'use client'
 
-import { login } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import React from 'react'
 import { FaGithub } from 'react-icons/fa'
+import { login } from '../actions'
 
 const GithubAuthBtn = () => {
 

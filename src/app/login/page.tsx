@@ -1,13 +1,13 @@
-import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 
-import Container from "@/components/container"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import GithubAuthBtn from "./components/github-auth-btn"
-import LoginForm from "./components/login-form"
-import RegisterForm from "./components/register-form"
+import { auth } from "@/auth"
+import Container from "@/components/container"
+import LoginForm from "./_components/login-form"
+import RegisterForm from "./_components/register-form"
+import GithubAuthBtn from "./_components/github-auth-btn"
 
 const LoginPage = async () => {
 
