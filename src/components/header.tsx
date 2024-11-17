@@ -1,15 +1,16 @@
+import { Button } from "./ui/button"
+import Link from "next/link"
+
 import { auth } from "@/auth"
-import Container from "./container"
 import { IAuth } from "@/types/user"
 import Logo from "./logo"
 import UserMenu from "./user-menu"
-import { Button } from "./ui/button"
-import Link from "next/link"
+import Container from "./container"
 
 
 const Header = async () => {
 
-  const session = await auth() as IAuth;
+  const session = await auth() as IAuth
 
   return (
     <Container className="max-w-5xl left-1/2 -translate-x-1/2 fixed top-4">

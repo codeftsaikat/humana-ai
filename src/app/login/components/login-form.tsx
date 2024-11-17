@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast"
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import AuthBtn from '@/components/auth-btn'
+import SubmitBtn from '@/components/submit-btn'
 import { loginWithCredentials } from '@/actions/auth'
 import { useRouter } from 'next/navigation'
 
@@ -79,7 +79,7 @@ const LoginForm = () => {
             </FormItem>
           )}
         />
-        <AuthBtn name='Login' isLoading={isLoading} />
+        <SubmitBtn name='Login' isLoading={isLoading} />
       </form>
     </Form>
   )

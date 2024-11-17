@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import AuthBtn from '@/components/auth-btn'
+import SubmitBtn from '@/components/submit-btn'
 import { registerWithCredentials } from '@/actions/auth'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
@@ -102,7 +102,7 @@ const RegisterForm = () => {
             </FormItem>
           )}
         />
-        <AuthBtn name='Register' isLoading={isLoading} />
+        <SubmitBtn name='Register' isLoading={isLoading} />
       </form>
     </Form>
   )
