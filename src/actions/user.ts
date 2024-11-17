@@ -1,5 +1,6 @@
 'use server'
 
+import { auth } from "@/auth";
 import { prisma } from "@/config/prisma";
 import { User } from "@prisma/client";
 import bcryptjs from 'bcryptjs';
@@ -21,4 +22,30 @@ export async function getUserByEmail(email: string) {
     return null
   }
   return user;
+}
+
+export async function setHumanizedText(userEmail: string, originalText: string, humanizedText: string): Promise<void> {
+
+  const user = await getUserByEmail(userEmail);
+
+  try {
+    if (!user) {
+      throw new Error('User not found');
+    }
+    await prisma.textTransformation.create({
+      data: {
+        originalText,
+        humanizedText,
+        userId: user.id
+      }
+    })
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error creating text transformation');
+  }
+}
+
+export async function isLoggedIn(): Promise<boolean> {
+  const session = await auth();
+  return !!session;
 }

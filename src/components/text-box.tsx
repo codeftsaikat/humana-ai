@@ -4,16 +4,16 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
-import { X } from 'lucide-react'
+import { LoaderCircle, X } from 'lucide-react'
 import { humanizeText } from '@/actions/openai'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
 import { useToast } from '@/hooks/use-toast'
-import { type ActionError } from '@/types/openai'
 import { useRouter } from 'next/navigation'
-import { ActionErrors } from '@/constants/const'
+import { isLoggedIn } from '@/actions/user'
+import { cn } from '@/lib/utils'
 
 const textSchema = z.object({
   text: z.string().min(32, 'Text must be at least 32 characters').max(1000, 'Text must be less than 1000 characters')
@@ -37,7 +37,7 @@ export default function TextBox() {
       text: ''
     }
   })
-  
+
   const { watch, setValue } = form
   const text = watch('text')
 
@@ -47,39 +47,41 @@ export default function TextBox() {
     setWordCount(text.trim() === '' ? 0 : words.length)
   }, [text])
 
+  useEffect(() => {
+    if (humanizedText && humanizedTextRef.current) {
+      setTimeout(() => {
+        humanizedTextRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [humanizedText]);
+
   const handleClear = () => {
     setValue('text', '')
   }
 
   const onSubmit = async ({ text }: z.infer<typeof textSchema>) => {
     setIsLoading(true)
+
+    const loggedIn = await isLoggedIn();
+
+    if (!loggedIn) {
+      toast({
+        title: 'You need to be logged in to humanize text',
+        description: 'Please login',
+        variant: 'destructive'
+      })
+      router.push('/login')
+    }
+
     try {
       const result = await humanizeText(text)
       setHumanizedText(result)
-      if (humanizedTextRef.current) {
-        humanizedTextRef.current.scrollIntoView({ behavior: 'smooth' })
-      }
     } catch (error) {
-      if (error === ActionErrors.UNAUTHORIZED) {
-        toast({
-          title: "No autorizado",
-          description: "Por favor, inicia sesión para continuar.",
-          variant: "destructive"
-        });
-        router.push('/login');
-      } else if (error === ActionErrors.API_ERROR) {
-        toast({
-          title: "Error de API",
-          description: "Hubo un problema con el servicio de OpenAI. Por favor, intenta de nuevo más tarde.",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: `${error.message}` || "Ocurrió un error inesperado.",
-          variant: "destructive"
-        });
-      }
+      toast({
+        title: 'Error',
+        description: `${error}`,
+        variant: 'destructive'
+      })
     } finally {
       setIsLoading(false)
     }
@@ -125,7 +127,7 @@ export default function TextBox() {
                 </FormItem>
               )}
             />
-            <div className="mt-2 text-sm text-muted-foreground">
+            <div className={cn("mt-2 text-sm text-muted-foreground", charCount > 1000 ? 'text-red-500' : '')}>
               Characters: {charCount} | Words: {wordCount}
             </div>
           </CardContent>
@@ -133,8 +135,8 @@ export default function TextBox() {
             <div className="text-sm text-muted-foreground">
               {charCount > 0 && `${1000 - charCount} characters remaining`}
             </div>
-            <Button disabled={isLoading} className='h-10' type="submit">
-              {isLoading ? 'Humanizing...' : 'Humanize'}
+            <Button disabled={isLoading} className='h-10 flex items-center gap-2' type="submit">
+              {isLoading ? <><LoaderCircle className="animate-spin size-6" /><span>Humanizing...</span></> : 'Humanize'}
             </Button>
           </CardFooter>
         </form>
