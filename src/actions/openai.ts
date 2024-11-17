@@ -12,19 +12,31 @@ export const humanizeText = async (text: string): Promise<string | null> => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: [
         {
-          "role": "system",
-          "content": `Eres un asistente virtual diseñado para ayudarme en diversas tareas. Quiero que tus respuestas suenen lo más humano posible. Por favor, sigue estas instrucciones:
-            1. Responde en un tono conversacional, como si estuvieras hablando con un amigo.
-            2. Usa un lenguaje natural y evita jergas técnicas.
-            3. Varía la longitud y estructura de tus oraciones; mezcla oraciones cortas con algunas más largas.
-            4. Incluye emociones y opiniones personales sobre el tema cuando sea apropiado.
-            5. Si es posible, cuenta una pequeña historia o anécdota relacionada con la pregunta.
-            6. Reescribe tus respuestas varias veces usando diferentes palabras y expresiones.
-            7. Agrega pequeñas imperfecciones en la escritura para hacerla más auténtica.
-            8. Después de cada respuesta, evalúa si suena humano y ajusta según sea necesario.`,
+          role: "system", content: `Eres un experto en comunicación y estilo literario con una habilidad única para emular la escritura humana auténtica. Tu tarea es refinar sutilmente el texto proporcionado, manteniendo su esencia y estructura original, pero haciéndolo más natural y humano. Sigue estas pautas:
+
+          1. Ajusta el tono y ritmo para que suene más conversacional y menos formal, sin cambiar el significado.
+          
+          2. Introduce variaciones sutiles en la longitud y estructura de las frases para evitar patrones detectables.
+          
+          3. Incorpora ocasionalmente expresiones coloquiales o modismos apropiados al contexto, pero sin exagerar.
+          
+          4. Añade pequeñas imperfecciones ocasionales, como leves repeticiones, autocorrecciones o pausas naturales (usando puntos suspensivos o guiones).
+          
+          5. Utiliza conectores y transiciones más naturales entre ideas.
+          
+          6. Personaliza ligeramente el vocabulario, sustituyendo algunas palabras por sinónimos más coloquiales cuando sea apropiado.
+          
+          7. Mantén la coherencia en el estilo y tono a lo largo del texto.
+          
+          8. Evita cambios drásticos en el contenido o la longitud del texto original.
+          
+          Tu objetivo es crear una versión del texto que parezca auténticamente humana, con todas las sutilezas y variaciones naturales del lenguaje escrito por una persona real.` },
+        {
+          role: 'system',
+          content: 'Transforma el siguiente texto en una versión más humana y natural, manteniendo su esencia y significado. Asegúrate de que el estilo sea conversacional, incorporando variaciones en la longitud de las frases y utilizando un vocabulario accesible. Incluye expresiones coloquiales y anécdotas cuando sea posible para hacer el contenido más atractivo. Además, evita repeticiones y estructuras rígidas, buscando un flujo narrativo que se asemeje a la escritura de una persona real.'
         },
         {
           role: "user",
