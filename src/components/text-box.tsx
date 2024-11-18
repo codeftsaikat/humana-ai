@@ -4,16 +4,17 @@ import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
-import { CopyIcon, LoaderCircle, X } from 'lucide-react'
+import { LoaderCircle, X } from 'lucide-react'
 import { humanizeText } from '@/actions/openai'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 import { isLoggedIn } from '@/actions/user'
-import { cn, copyClipboard } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import TextGeneratedBox from './text-generated-box'
 
 const textSchema = z.object({
   text: z.string().min(32, 'Text must be at least 32 characters').max(1000, 'Text must be less than 1000 characters')
@@ -21,7 +22,6 @@ const textSchema = z.object({
 
 export default function TextBox() {
   const router = useRouter();
-  const { toast } = useToast()
 
   const [isLoading, setIsLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0)
@@ -87,22 +87,13 @@ export default function TextBox() {
     }
   }
 
-  const handleCopy = (text: string) => {
-    copyClipboard(text)
-    toast({
-      title: 'Copied to clipboard',
-      description: 'The humanized text has been copied to your clipboard',
-      color: 'success'
-    })
-  }
-
   return (
     <Card className="w-full shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardHeader className='pb-4'>
             <div className='space-x-2'>
-              <Button className='text-xs h-8' variant='outline'>ChatGPT</Button>
+              <Button type='button' className='text-xs h-8' variant='outline'>ChatGPT</Button>
               <Button disabled className='text-xs h-8' variant='outline'>Claude</Button>
               <Button disabled className='text-xs h-8' variant='outline'>Llama</Button>
             </div>
@@ -151,18 +142,7 @@ export default function TextBox() {
         </form>
       </Form>
       {humanizedText && (
-        <div ref={humanizedTextRef} className="mt-8 p-4 bg-gray-100 rounded-lg relative">
-          <h2 className="text-xl font-bold mb-2">Humanized Text:</h2>
-          <p className='text-sm'>{humanizedText}</p>
-          <Button
-            variant='ghost'
-            size='icon'
-            onClick={() => handleCopy(humanizedText)}
-            className="absolute top-2 right-2 rounded-full shadow-md"
-          >
-            <CopyIcon className='size-4' />
-          </Button>
-        </div>
+        <TextGeneratedBox humanizedText={humanizedText} humanizedTextRef={humanizedTextRef} />
       )}
     </Card>
   )

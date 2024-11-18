@@ -49,3 +49,27 @@ export async function isLoggedIn(): Promise<boolean> {
   const session = await auth();
   return !!session;
 }
+
+
+export async function getUserTextTransformations(): Promise<string[]> {
+
+  const session = await auth();
+
+  if (!session || !session.user || !session.user.email) {
+    throw new Error('Not logged in');
+  }
+
+  const user = await getUserByEmail(session?.user?.email);
+  
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const transformations = await prisma.textTransformation.findMany({
+    where: {
+      userId: user.id
+    }
+  });
+
+  return transformations.map(t => t.humanizedText);
+}
