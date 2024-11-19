@@ -15,7 +15,7 @@ const Home = async () => {
         <div className='space-y-2'>
           <h1 className='text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none'>Humanize AI Generated Content</h1>
           <p className='mx-auto max-w-3xl text-muted-foreground md:text-xl dark:text-gray-400'>
-            StealthWriter is an SEO tool that converts AI generated content into human-like content. Get better content & get 100% human score.
+            Humanizer is an SEO tool converted the generated AI content into human content. Get 100% human score + better content.
           </p>
         </div>
         {!session && (
