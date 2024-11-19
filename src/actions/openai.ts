@@ -35,10 +35,6 @@ export const humanizeText = async (text: string): Promise<string | null> => {
           
           Tu objetivo es crear una versión del texto que parezca auténticamente humana, con todas las sutilezas y variaciones naturales del lenguaje escrito por una persona real.` },
         {
-          role: 'system',
-          content: 'Transforma el siguiente texto en una versión más humana y natural, manteniendo su esencia y significado. Asegúrate de que el estilo sea conversacional, incorporando variaciones en la longitud de las frases y utilizando un vocabulario accesible. Incluye expresiones coloquiales y anécdotas cuando sea posible para hacer el contenido más atractivo. Además, evita repeticiones y estructuras rígidas, buscando un flujo narrativo que se asemeje a la escritura de una persona real.'
-        },
-        {
           role: "user",
           content: text,
         },
